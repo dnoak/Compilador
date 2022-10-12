@@ -4,7 +4,5 @@ def is_symbol(symbol):
 
 
 a = {}
-
-if a:
-    print(a)
+print('.'.split())
 

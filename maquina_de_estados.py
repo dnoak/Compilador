@@ -8,6 +8,7 @@ import time
 class MaquinaDeEstados:
     def __init__(self):
         self.syms_list = ', ; : ( ) + - * / > < ='.split()
+        self.syms_special_list = '.'.split()
         self.dsyms_list = '== >= <='.split()
         self.reserved_list = 'program var integer real begin end procedure readd if else while do'.split()
 
@@ -42,6 +43,18 @@ class MaquinaDeEstados:
             #'ERROR': self.error,
         }
 
+        self.automatas_dict_syntactic = {
+            'int operation': {
+                'START': ['-', '+', '0-9'],
+                '0-9': ['-', '+', '*', '/', '0-9', 'END'],
+                '-': ['0-9',],
+                '+': ['0-9',],
+                '*': ['0-9',],
+                '/': ['0-9',],
+                'END': ['END']
+            },
+        }
+
         self.automatas_dict_regex = {
             'id': {
                 'START': ['a-zA-Z'],
@@ -73,21 +86,7 @@ class MaquinaDeEstados:
                 'END': ['END']
             },
 
-            '.': {
-                'START': ['.'],
-                '.': ['END'],
-                'END': ['END']
-            },
-
-            # 'int operation': {
-            #     'START': ['-', '+', '0-9'],
-            #     '0-9': ['-', '+', '*', '/', '0-9', 'END'],
-            #     '-': ['0-9',],
-            #     '+': ['0-9',],
-            #     '*': ['0-9',],
-            #     '/': ['0-9',],
-            #     'END': ['END']
-            # },
+           
         }
 
         self.automatas_dict_dsyms = {
@@ -109,10 +108,21 @@ class MaquinaDeEstados:
             for sym in self.syms_list
         }
 
+        self.automatas_dict_syms_special = {
+            sym: {
+                'START': [sym],
+                sym: ['END'],
+                'END': ['END'],
+            } 
+            for sym in self.syms_special_list
+        }
+
         self.automatas_dict = {
             **self.automatas_dict_regex,
             **self.automatas_dict_dsyms,
             **self.automatas_dict_syms,
+            **self.automatas_dict_syms_special,
+            #**self.automatas_dict_syntactic,
             }
 
     def is_int(self, char): return char.isdigit()
@@ -191,14 +201,7 @@ class MaquinaDeEstados:
             else:
                 print(f'{string} - ERRO')
 
-          
-    
-
-               
-
-
-
-'''a = MaquinaDeEstados()
+a = MaquinaDeEstados()
 print(f"{a.state_machine('=', '==') = }")
 print(f"{a.state_machine('==', '==') = }")
 print(f"{a.state_machine('===', '==') = }")
@@ -222,4 +225,3 @@ print(f"{a.state_machine('sd.', 'id') = }")
 print(f"{a.state_machine('sdda0032', 'id') = }")
 print(f"{a.state_machine('9sd123', 'id') = }")
 print(f"{a.state_machine('ad34ssdsad874', 'id') = }")
-'''

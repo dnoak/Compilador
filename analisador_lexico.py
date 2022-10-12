@@ -8,14 +8,26 @@ path = 'codigo.dan'
 with open(path, 'r') as f:
     codigo = f.read()
 
-'''replace_list = ['== >= <= <>'.split(), '= > <. , : ; ( ) + - * / { }'.split()]
-replace_dict = [ {key: f' {key} ' for key in list_n} for list_n in replace_list ] 
+codigo = '''
+program lalg;
+var a: integer;
+2323.23
+{asd} {s dasds s  s  s }
+332==1;
+3 == a * 3 /56.8;
+var a3: -1;
+var sss: 3 >= 3 <= 4
+34 < 3
+3 > 32
+if (bal120ss== 1 ) begin
+axxx3 = 123.;
+end
+
+begin
+readd(a,@,1);
+read(B);
+end .
 '''
-'''for dict in replace_dict:
-    for key in dict:
-        codigo = codigo.replace(key, dict[key])'''
-#print(codigo)
 
 A = MaquinaDeEstados()
 A.lexical_analyzer(codigo)
-#print(A.state_machine('{ 34xs 55 ssd', 'comment'))
