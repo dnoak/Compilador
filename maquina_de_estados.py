@@ -9,7 +9,7 @@ class MaquinaDeEstados:
         self.syms_list = ', ; : ( ) + - * / > < ='.split()
         self.syms_special_list = '.'.split()
         self.dsyms_list = '== >= <='.split()
-        self.reserved_list = 'program var integer real begin end procedure readd if else while do'.split()
+        self.reserved_list = 'program var integer real begin end procedure if else while do'.split()
 
         self.state_dict = {
             '0-9': self.is_int,
