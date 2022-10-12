@@ -1,4 +1,3 @@
-from enum import auto
 import os
 from pprint import pprint
 import time
@@ -85,8 +84,6 @@ class MaquinaDeEstados:
                 '}': ['END'],
                 'END': ['END']
             },
-
-           
         }
 
         self.automatas_dict_dsyms = {
@@ -95,8 +92,7 @@ class MaquinaDeEstados:
                 f'{dsym[0]} (1)': [f'{dsym[1]} (2)'],
                 f'{dsym[1]} (2)': ['END'],
                 'END': ['END']
-            }
-            for dsym in self.dsyms_list
+            } for dsym in self.dsyms_list
         }
 
         self.automatas_dict_syms = {
@@ -104,8 +100,7 @@ class MaquinaDeEstados:
                 'START': [sym],
                 sym: ['END'],
                 'END': ['END'],
-            } 
-            for sym in self.syms_list
+            } for sym in self.syms_list
         }
 
         self.automatas_dict_syms_special = {
@@ -113,8 +108,7 @@ class MaquinaDeEstados:
                 'START': [sym],
                 sym: ['END'],
                 'END': ['END'],
-            } 
-            for sym in self.syms_special_list
+            } for sym in self.syms_special_list
         }
 
         self.automatas_dict = {
@@ -149,16 +143,12 @@ class MaquinaDeEstados:
     def ALL(self, char): return True
     def END(self, char): return False
 
-    #def error(self, char): return
-
     def state_machine(self, string, key):
         string = list(string)
-        #print(string)
         transitions = self.automatas_dict[key]
         directions = transitions['START']
         for char in string:
             for dir in directions:
-                #print(char, self.state_dict[dir.split()[0]](char), directions)
                 if self.state_dict[dir.split()[0]](char):
                     directions = transitions[dir]
                     break
@@ -201,27 +191,31 @@ class MaquinaDeEstados:
             else:
                 print(f'{string} - ERRO')
 
-a = MaquinaDeEstados()
-print(f"{a.state_machine('=', '==') = }")
-print(f"{a.state_machine('==', '==') = }")
-print(f"{a.state_machine('===', '==') = }")
-print()
-print(f"{a.state_machine('>=', '>=') = }")
-print(f"{a.state_machine('>==', '>=') = }")
-print(f"{a.state_machine('>>=', '>=') = }")
-print(f"{a.state_machine('=', '>=') = }")
-print(f"{a.state_machine('>', '>=') = }")
-print()
-print(f"{a.state_machine('238+342/4880-6*4/45', 'int operation') = }")
-print(f"{a.state_machine('238++342/4880-6*4/45', 'int operation') = }")
-print(f"{a.state_machine('238+3440-6*/4/45', 'int operation') = }")
-print()
-print(f"{a.state_machine('.', 'float') = }")
-print(f"{a.state_machine('1.', 'float') = }")
-print(f"{a.state_machine('1453', 'int') = }")
-print(f"{a.state_machine('2384.21', 'float') = }")
-print()
-print(f"{a.state_machine('sd.', 'id') = }")
-print(f"{a.state_machine('sdda0032', 'id') = }")
-print(f"{a.state_machine('9sd123', 'id') = }")
-print(f"{a.state_machine('ad34ssdsad874', 'id') = }")
+def main_test():
+    a = MaquinaDeEstados()
+    print(f"{a.state_machine('=', '==') = }")
+    print(f"{a.state_machine('==', '==') = }")
+    print(f"{a.state_machine('===', '==') = }")
+    print()
+    print(f"{a.state_machine('>=', '>=') = }")
+    print(f"{a.state_machine('>==', '>=') = }")
+    print(f"{a.state_machine('>>=', '>=') = }")
+    print(f"{a.state_machine('=', '>=') = }")
+    print(f"{a.state_machine('>', '>=') = }")
+    print()
+    print(f"{a.state_machine('238+342/4880-6*4/45', 'int operation') = }")
+    print(f"{a.state_machine('238++342/4880-6*4/45', 'int operation') = }")
+    print(f"{a.state_machine('238+3440-6*/4/45', 'int operation') = }")
+    print()
+    print(f"{a.state_machine('.', 'float') = }")
+    print(f"{a.state_machine('1.', 'float') = }")
+    print(f"{a.state_machine('1453', 'int') = }")
+    print(f"{a.state_machine('2384.21', 'float') = }")
+    print()
+    print(f"{a.state_machine('sd.', 'id') = }")
+    print(f"{a.state_machine('sdda0032', 'id') = }")
+    print(f"{a.state_machine('9sd123', 'id') = }")
+    print(f"{a.state_machine('ad34ssdsad874', 'id') = }")
+
+if __name__ == '__main__':
+    main_test()
