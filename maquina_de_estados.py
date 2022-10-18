@@ -8,7 +8,7 @@ class MaquinaDeEstados:
     def __init__(self):
         self.syms_list = ', ; : ( ) + - * / > < ='.split()
         self.syms_special_list = '.'.split()
-        self.dsyms_list = '== >= <='.split()
+        self.dsyms_list = '== >= <= <>'.split()
         self.reserved_list = 'program var integer real begin end procedure if else while do'.split()
 
         self.state_dict = {
@@ -190,32 +190,6 @@ class MaquinaDeEstados:
                     break
             else:
                 print(f'{string} - ERRO')
-
-def main_test():
-    a = MaquinaDeEstados()
-    print(f"{a.state_machine('=', '==') = }")
-    print(f"{a.state_machine('==', '==') = }")
-    print(f"{a.state_machine('===', '==') = }")
-    print()
-    print(f"{a.state_machine('>=', '>=') = }")
-    print(f"{a.state_machine('>==', '>=') = }")
-    print(f"{a.state_machine('>>=', '>=') = }")
-    print(f"{a.state_machine('=', '>=') = }")
-    print(f"{a.state_machine('>', '>=') = }")
-    print()
-    print(f"{a.state_machine('238+342/4880-6*4/45', 'int operation') = }")
-    print(f"{a.state_machine('238++342/4880-6*4/45', 'int operation') = }")
-    print(f"{a.state_machine('238+3440-6*/4/45', 'int operation') = }")
-    print()
-    print(f"{a.state_machine('.', 'float') = }")
-    print(f"{a.state_machine('1.', 'float') = }")
-    print(f"{a.state_machine('1453', 'int') = }")
-    print(f"{a.state_machine('2384.21', 'float') = }")
-    print()
-    print(f"{a.state_machine('sd.', 'id') = }")
-    print(f"{a.state_machine('sdda0032', 'id') = }")
-    print(f"{a.state_machine('9sd123', 'id') = }")
-    print(f"{a.state_machine('ad34ssdsad874', 'id') = }")
 
 if __name__ == '__main__':
     main_test()
