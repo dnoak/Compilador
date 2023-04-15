@@ -3,9 +3,9 @@ import os
 os.system('cls')
 
 automatas = {
-    "0-9": {"start": ['$'+str(i) for i in range(6)]},
-    "A-Z": {"start": ['$'+chr(i+65) for i in range(10)]},
-    "a-z": {"start": ['$'+chr(i+97) for i in range(10)]},
+    "0-9": {"start": ["$"+str(i) for i in range(10)]},
+    "A-Z": {"start": ["$"+chr(i+65) for i in range(10)]},
+    "a-z": {"start": ["$"+chr(i+97) for i in range(10)]},
     "sign": {"start": ["$+", "$-"]},
     "op": {"start": ["$+", "$-", "$*", "$/"]},
     
@@ -38,14 +38,9 @@ automatas = {
     },
     "mat_f": {
         "start": ["*sign"],
-        "sign": ["*op_int", "*op_float"],
+        "sign": ["*op_float"],
         "op_int": ["*sign", "$end"],
         "op_float": ["*sign", "$end"],
-    },
-    "teste": {
-        "start": ["*sign"],
-        "sign": ["*int", "$end"],
-        "int": ["*teste"]
     },
 
     "programa": {
@@ -90,57 +85,40 @@ def format(state):
 def log(message, t=True):
     if t: print(message)
 
-
 def state_machine(automata, depth=0):
     global pos
     next_state = 'start'
-    return_state = 0
     while pos < len(string):
+        return_state = None
         states = automatas[automata][next_state]
-        log(f"{spaces(depth)}{dball[depth]}❓\"{string[pos]}\" ⏩ {states}")
-
         for state_pos, state in enumerate(states): #🟢
             if state[0] == '$':
                 if (string[pos]) == format(state):
-                    log(f"{spaces(depth+1)}✔️ {string[pos]} {state}")
                     pos += 1
                     if state[1:] in automatas[automata].keys():
                         next_state = state[1:]
                         break
-                    else:
-                        log(f"{spaces(depth)}✔️ $ {return_state=}, {state=}")
-                        return 1
-
+                    else: return state
             else:
-                log(f"{spaces(depth+1)}{'🔹'*5} ↘️ INICIO {state} {'🔹'*5}")
                 return_state = state_machine(format(state), depth+1)
-
-                if return_state:
-                    next_state = state[1:]
-                    log(f"{spaces(depth)}✔️ * {return_state=}, {state=}")
-                    break
-                #log('')
+                if return_state is not None:
+                    if next_state in states:
+                        next_state = state[1:]
+                        break
+                    else: return state
         else:
-            if '$end' in states:
-                log(f"{spaces(depth)}{'🔸'*5} FIM {automata} {'🔸'*5}")
-                #log('')
-                return 1
+            if '$end' in states: return '$end'
+            return None
 
-            log(f"{spaces(depth)}❌ {return_state=}, {state=}")
-            return 0
-        log('\n')
-    #return 1
-
-dball= ['🟡', '🟢', '🔵', '🟠', '🔴', '🟣','🟤', '⚫']
 pos = 0
-string = '3.55'
-spaces = lambda x: ''.join([f'|{s}|---' for s in range(x)])+'> '
-                           
-string=list(string+'$')
-sm_result = state_machine('float')
+string = ['program', 'ident', ';', 'dc', 'begin', 'comandos', '.', '$']#'+43.8*.4737/4385'
+spaces = 4*' '
+
+#string=list(string+'$')
+sm_result = state_machine('programa')
 print(sm_result)
 print(pos, len(string))
-print(len(string) == pos+1)
+print(len(string) == pos+1 and sm_result == '$end')
 
 
 
