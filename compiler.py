@@ -1,12 +1,12 @@
 import os
 
-os.system('clear||cls')
+os.system('cls')
 
 automatas = {
     # terminais
     "0-9": {"start": ["$"+str(i) for i in range(10)]},
-    "A-Z": {"start": ["$"+chr(i+65) for i in range(26)]},
-    "a-z": {"start": ["$"+chr(i+97) for i in range(26)]},
+    "A-Z": {"start": ["$"+chr(i+65) for i in range(10)]},
+    "a-z": {"start": ["$"+chr(i+97) for i in range(10)]},
     "op_add": {"start": ["$+", "$-"]},
     "op_mul": {"start": ["$*", "$/"]},
 
@@ -21,7 +21,6 @@ automatas = {
         "start": ["*0-9"],
         "0-9": ["*0-9", '$end']
     },
-    "f": {"start": ['*float', '$end']},
     "float": {
         "start": ["$.#0", "*int#0"],
         ".#0": ["*int#1"],
@@ -36,23 +35,33 @@ automatas = {
         "op_mul": ["*op_add"],
         "(": ["*op_mat"],
         "op_mat": ["$)"],
-        ")": ["$end"],
+        ")": ["*op_mat", "$end"],
+    },
+    "sinal": {"start": ["$+", "$-"]},
+    "op": {"start": ["$+", "$-", "$*", "$/"]},
+    "int_op": {
+        "start": ["*int", "*mat"],
+        "int": ["*op#0", "$end"],
+        "op#0": ["*int"],
+        "mat": ["*op#1", "$end"],
+        "op#1": ["*mat"]
+    },
+    "mat": {
+        "start": ["$("],
+        "(": ["*sinal"],
+        "sinal": ["*int_op"],
+        "int_op": ["$)"],
+        ")": ["*mat", "$end"],
     }
+
 }
-
-def nonterminal_states(states):
-    return [(s if s[0] == '*' else '' ) for s in states]
-
-def terminal_states(states):
-    return [(s if s[0] == '$' else '' ) for s in states]
 
 def format(state):
     return state.split('#')[0][1:]
 
+def log(message, t=True):
+    if t: print(message)
 
-
-pos = 0
-string = list('b14a$')
 
 def state_machine(automata, depth=0):
     global pos
@@ -62,27 +71,27 @@ def state_machine(automata, depth=0):
 
         return_state = None
         states = automatas[automata][next_state]
-        print(f"{depth*' '*2}⏩ {string[pos]} {states}")
+        log(f"{depth*spaces}❓\"{string[pos]}\" ⏩ {states}")
 
         for state_pos, state in enumerate(states): #🟢
             if state[0] == '$':
                 if (string[pos]) == format(state):
-                    print(f"{depth*' '*2}✔️ {string[pos]} {state}")
+                    log(f"{(depth+1)*spaces}✔️ {string[pos]} {state}")
                     pos += 1
                     if state[1:] in automatas[automata].keys():
                         next_state = state[1:]
                         break
                     else:
-                        print(f"{depth*' '*2}🟢 $ {return_state=}, {state=}")
+                        log(f"{(depth+1)*spaces}🟢 $ {return_state=}, {state=}")
                         return state
 
             else:
-                print(f"{depth*' '*2} ↘️ {state}")
+                log(f"{(depth+1)*spaces} ↘️ {state}")
                 return_state = state_machine(format(state), depth+1)
 
                 if return_state is not None:
                     next_state = state[1:]
-                    print(f"{depth*' '*2}🟢 * {return_state=}, {state=}")
+                    log(f"{(depth+1)*spaces}🟢 * {return_state=}, {state=}")
                     break
                     #return state
                 else:
@@ -101,17 +110,24 @@ def state_machine(automata, depth=0):
         #     return None
         else:
             if '$end' in states:
-                print(f"{depth*' '*2}✔️ FIM {automata}")
-                print()
+                log(f"{depth*' '*2}{'✅'*10} FIM {automata} {'✅'*10}")
+                log('')
                 return '$end'
  
-            print(f"{depth*' '*2}<< TODOS {return_state=}, {state=}")
+            log(f"{depth*' '*2}❌ {return_state=}, {state=}")
             return None
-
     #return None
 
-print(state_machine('id'))
-#print(len(string), pos)
+pos = 0
+string = '(+1*2+-(+3)+(+4))'
+spaces = 4*' '
+
+string=list(string+'$')
+sm_result = state_machine('mat')
+print(sm_result)
+print(pos, len(string))
+print(len(string) == pos+1 and sm_result == '$end')
+
 
 
 
