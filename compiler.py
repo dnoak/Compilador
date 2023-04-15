@@ -3,14 +3,12 @@ import os
 os.system('cls')
 
 automatas = {
-    # terminais
     "0-9": {"start": ["$"+str(i) for i in range(10)]},
     "A-Z": {"start": ["$"+chr(i+65) for i in range(10)]},
     "a-z": {"start": ["$"+chr(i+97) for i in range(10)]},
-    "op_add": {"start": ["$+", "$-"]},
-    "op_mul": {"start": ["$*", "$/"]},
-
-    # não terminais
+    "sign": {"start": ["$+", "$-"]},
+    "op": {"start": ["$+", "$-", "$*", "$/"]},
+    
     "id": {
         "start": ["*a-z", "*A-Z"],
         "a-z": ["*a-z", "*A-Z", "*int", "$end"],
@@ -28,32 +26,57 @@ automatas = {
         "int#0": ["*int#0", "$.#1", "$end"],
         "int#1": ["*int#1", "$end"]
     },
-    "op_mat": {
-        "start": ["*op_add"],
-        "op_add": ["*int", "$("],
-        "int": ["*int", "*op_mul", "*op_add", "$end"],
-        "op_mul": ["*op_add"],
-        "(": ["*op_mat"],
-        "op_mat": ["$)"],
-        ")": ["*op_mat", "$end"],
+    "op_int": {
+        "start": ["*int"],
+        "int": ["*op", "$end"],
+        "op": ["*int"],
     },
-    "sinal": {"start": ["$+", "$-"]},
-    "op": {"start": ["$+", "$-", "$*", "$/"]},
-    "int_op": {
-        "start": ["*int", "*mat"],
-        "int": ["*op#0", "$end"],
-        "op#0": ["*int"],
-        "mat": ["*op#1", "$end"],
-        "op#1": ["*mat"]
+    "op_float": {
+        "start": ["*float"],
+        "float": ["*op", "$end"],
+        "op": ["*float"],
     },
-    "mat": {
-        "start": ["$("],
-        "(": ["*sinal"],
-        "sinal": ["*int_op"],
-        "int_op": ["$)"],
-        ")": ["*mat", "$end"],
-    }
+    "mat_f": {
+        "start": ["*sign"],
+        "sign": ["*op_float"],
+        "op_int": ["*sign", "$end"],
+        "op_float": ["*sign", "$end"],
+    },
 
+    "programa": {
+        "start": ["$program"],
+        "program": ["$ident"],
+        "ident": ["$;"],
+        ";": ["*corpo"],
+        "corpo": ["$."],
+        ".": ["$end"],
+    },
+    "corpo": {
+        "start": ["*dc"],
+        "dc": ["$begin"],
+        "begin": ["*comandos"],
+        "comandos": ["$end"],
+    },
+    "dc": {
+        "start": ["*dc_v", "*dc_p"],
+    },
+    "dc_v": {
+        "start": ["$var", "$end"],
+        "var": ["$variaveis"],
+        "variaveis": ["$:"],
+        ":": ["*tipo_var"],
+        "tipo_var": ["$;"],
+        ";": ["*dc_v"],
+    },
+    "tipo_var": {
+        "start": ["$tipo_var"]
+    },
+    "dc_p": {
+        "start": ["$dc_p"]
+    },
+    "comandos": {
+        "start": ["$comandos"]
+    }
 }
 
 def format(state):
@@ -61,7 +84,6 @@ def format(state):
 
 def log(message, t=True):
     if t: print(message)
-
 
 def state_machine(automata, depth=0):
     global pos
@@ -90,40 +112,37 @@ def state_machine(automata, depth=0):
                 return_state = state_machine(format(state), depth+1)
 
                 if return_state is not None:
-                    next_state = state[1:]
-                    log(f"{(depth+1)*spaces}🟢 * {return_state=}, {state=}")
-                    break
+                    # CONFERE E APAGA SÓ O IF E O ELSE
+                    if next_state in states:
+                        next_state = state[1:]
+                        log(f"{(depth+1)*spaces}🟢 * {return_state=}, {state=}")
+                        break
+                    else:
+                        return state
                     #return state
-                else:
+                #else:
                     #print(state_pos, len(states))
                     #if state_pos < len(states):
                        # continue
                     #return None
-                    continue
+                    #continue
 
-        # else:
-        #     if state == '$end':
-        #         print(f"{depth*' '*2}✔️ FIM {automata}")
-        #         print()
-        #         return state
-        #     print(f"{depth*' '*2}<< TODOS {return_state=}, {state=}")
-        #     return None
         else:
             if '$end' in states:
                 log(f"{depth*' '*2}{'✅'*10} FIM {automata} {'✅'*10}")
                 log('')
                 return '$end'
- 
+
             log(f"{depth*' '*2}❌ {return_state=}, {state=}")
             return None
     #return None
 
 pos = 0
-string = '(+1*2+-(+3)+(+4))'
+string = ['program', 'ident', ';', 'dc', 'begin', 'comandos', '.', '$']#'+43.8*.4737/4385'
 spaces = 4*' '
 
-string=list(string+'$')
-sm_result = state_machine('mat')
+#string=list(string+'$')
+sm_result = state_machine('programa')
 print(sm_result)
 print(pos, len(string))
 print(len(string) == pos+1 and sm_result == '$end')
