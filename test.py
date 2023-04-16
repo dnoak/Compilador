@@ -25,7 +25,14 @@ lalgol = \
 16. <mais_ident> ::= ; <argumentos> | λ
 17. <pfalsa> ::= else <cmd> | λ
 18. <comandos> ::= <cmd> ; <comandos> | λ
-19. <cmd> ::= read ( <variaveis> ) | write ( <variaveis> ) | while <condicao> do <cmd> | if <condicao> then <cmd> <pfalsa> | ident := <expressao> | ident <lista_arg> | begin <comandos> end
+19. <cmd> ::=\
+    read ( <variaveis> ) |\
+      write ( <variaveis> ) |\
+          while <condicao> do <cmd> |\
+              if <condicao> then <cmd> <pfalsa> |\
+                  ident := <expressao> |\
+                      ident <lista_arg> |\
+                          begin <comandos> end
 20. <condicao> ::= <expressao> <relacao> <expressao>
 21. <relacao> ::= = | <> | >= | <= | > | <
 22. <expressao> ::= <termo> <outros_termos>
@@ -44,20 +51,26 @@ def format(state, sym=True):
     else:
         return sym*'$'+state
 
+automatas = defaultdict(lambda: defaultdict())
 for line in lalgol.split('\n'):
     automata = line.split('::=')[0].split()[1][1:-1]
     branch_states = line.split('::=')[1].split('|')
-    automatas = defaultdict(lambda: defaultdict())
-    #print(line)
+    automatas[automata]['start'] = []
     for states in branch_states:
         next_state = 'start'
         for state in states.split():
-
-            automatas[automata][next_state] = [format(state)]
+            if next_state == 'start':
+                automatas[automata][next_state].append(format(state))
+            else:
+                automatas[automata][next_state] = [format(state)]
             next_state = format(state, sym=False)
-        automatas[automata][next_state] = ['$end']
-        print('new')
+        #automatas[automata][next_state] = ['$']
+    print(branch_states)
 
     pprint(json.loads(json.dumps(automatas)), indent=2, sort_dicts=False)
-    input()
+    #print(json.dumps(automatas, indent=4))
+    #input()
 
+
+with open('lalg.json', 'w') as j:
+    j.write(json.dumps(automatas, indent=2))
