@@ -1,3 +1,10 @@
+import os
+from collections import defaultdict
+from pprint import pprint
+import json
+
+os.system('cls')
+
 lalgol = \
 '''\
 1. <programa> ::= program ident ; <corpo> .
@@ -31,9 +38,26 @@ lalgol = \
 29. <fator> ::= ident | numero_int | numero_real | ( <expressao> ) \
 '''
 
+def format(state, sym=True):
+    if state[0] == '<' and state[-1] == '>':
+        return sym*'*'+state[1:-1]
+    else:
+        return sym*'$'+state
+
 for line in lalgol.split('\n'):
-    states = line.split('::=')[1].split('|')
-    for state in states:
-        print(state.split(), end='->')
-    print()
+    automata = line.split('::=')[0].split()[1][1:-1]
+    branch_states = line.split('::=')[1].split('|')
+    automatas = defaultdict(lambda: defaultdict())
+    #print(line)
+    for states in branch_states:
+        next_state = 'start'
+        for state in states.split():
+
+            automatas[automata][next_state] = [format(state)]
+            next_state = format(state, sym=False)
+        automatas[automata][next_state] = ['$end']
+        print('new')
+
+    pprint(json.loads(json.dumps(automatas)), indent=2, sort_dicts=False)
+    input()
 

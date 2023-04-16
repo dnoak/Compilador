@@ -4,8 +4,8 @@ os.system('cls')
 
 automatas = {
     "0-9": {"start": ['$'+str(i) for i in range(6)]},
-    "A-Z": {"start": ['$'+chr(i+65) for i in range(10)]},
-    "a-z": {"start": ['$'+chr(i+97) for i in range(10)]},
+    "A-Z": {"start": ['$'+chr(i+65) for i in range(6)]},
+    "a-z": {"start": ['$'+chr(i+97) for i in range(6)]},
     "sign": {"start": ["$+", "$-"]},
     "op": {"start": ["$+", "$-", "$*", "$/"]},
     
@@ -81,17 +81,29 @@ automatas = {
     },
     "comandos": {
         "start": ["$comandos"]
+    },
+    
+    "condicao": {
+        "start": ["*expressao"],
+        "expressao": ["*relacao", "$end"],
+        "relacao": ["*expressao"],
+    },
+    "relacao": {
+        "start": ["$!=", "$>=", "$<=", "$>", "$<" ]
+    },
+    "expressao": {
+        "start": ["*termo"],
+        #"termo": []
+    },
+    "termo": {
+        "start": ["$x", "$y", "$z"]
     }
 }
 
-def format(state):
-    return state.split('#')[0][1:]
+format_ = lambda x: x.split('#')[0][1:]
+log = lambda x: print(x) if 1 else ...
 
-def log(message, t=True):
-    if t: print(message)
-
-
-def state_machine(automata, depth=0):
+def state_machine(automata, depth=1):
     global pos
     next_state = 'start'
     return_state = 0
@@ -101,43 +113,46 @@ def state_machine(automata, depth=0):
 
         for state_pos, state in enumerate(states): #🟢
             if state[0] == '$':
-                if (string[pos]) == format(state):
+                if (string[pos]) == format_(state):
                     log(f"{spaces(depth+1)}✔️ {string[pos]} {state}")
                     pos += 1
                     if state[1:] in automatas[automata].keys():
                         next_state = state[1:]
                         break
                     else:
-                        log(f"{spaces(depth)}✔️ $ {return_state=}, {state=}")
+                        log(f"{spaces(depth)}{dball[depth]} ✔️ $ {return_state=}, {state=}")
                         return 1
 
             else:
                 log(f"{spaces(depth+1)}{'🔹'*5} ↘️ INICIO {state} {'🔹'*5}")
-                return_state = state_machine(format(state), depth+1)
+                return_state = state_machine(format_(state), depth+1)
 
                 if return_state:
-                    next_state = state[1:]
-                    log(f"{spaces(depth)}✔️ * {return_state=}, {state=}")
-                    break
-                #log('')
+                    # if e else adicionados (testando ainda)
+                    if state[1:] in automatas[automata].keys():
+                        next_state = state[1:]
+                        log(f"{spaces(depth)}{dball[depth]}✔️ * {return_state=}, {state=}")
+                        break
+                    else:
+                        return 1
         else:
             if '$end' in states:
                 log(f"{spaces(depth)}{'🔸'*5} FIM {automata} {'🔸'*5}")
                 #log('')
                 return 1
-
             log(f"{spaces(depth)}❌ {return_state=}, {state=}")
             return 0
-        log('\n')
-    #return 1
+        
+        if depth == 1:
+            log('\n')
 
 dball= ['🟡', '🟢', '🔵', '🟠', '🔴', '🟣','🟤', '⚫']
 pos = 0
-string = '3.55'
-spaces = lambda x: ''.join([f'|{s}|---' for s in range(x)])+'> '
-                           
-string=list(string+'$')
-sm_result = state_machine('float')
+string = ['x', '>=', 'y', '<', 'z', '!=', "x"]
+spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else ' '*4 for s in range(x)])
+
+string=list(string+['$'])
+sm_result = state_machine('condicao')
 print(sm_result)
 print(pos, len(string))
 print(len(string) == pos+1)
