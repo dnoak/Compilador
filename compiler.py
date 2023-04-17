@@ -6,7 +6,6 @@ os.system('cls')
 def state_machine(automata, depth=1):
     global pos
     next_state = 'start'
-    return_state = 0
     while pos < len(string):
         states = automatas[automata][next_state]
         log(f"{spaces(depth)}❓\"{string[pos]}\" ⏩ {states}")
@@ -41,11 +40,16 @@ def state_machine(automata, depth=1):
         if depth == 1: log('\n')
 
 
-string = 'if numero_int * numero_real != numero_real then ident'
-automata = 'comandos'
+string = ' \
+program ident ; \
+var ident : real ; \
+var ident : integer ; \
+. \
+'
+automata = 'programa'
 
 pos = 0
-string=list(string.split()+['$'])
+string=list(string.split()+['$']) if len(string.split()) > 1 else list(string+"$")
 
 automatas = {}
 with open('lalg.json') as j: automatas |= json.load(j)

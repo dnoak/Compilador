@@ -69,7 +69,7 @@
     "start": ["*dc_v"]
   },
   "lista_arg": {
-    "start": ["$(","$"],
+    "start": ["$("],
     "(": ["*argumentos"],
     "argumentos": ["$)"]
   },
@@ -102,7 +102,7 @@
     "do": ["*cmd"],
     "then": ["*cmd"],
     "cmd": ["*pfalsa"],
-    "ident": ["*lista_arg", ":="],
+    "ident": ["*lista_arg", "$:="],
     ":=": ["*expressao"],
     "begin": ["*comandos"],
     "comandos": ["$end"]
@@ -113,7 +113,7 @@
     "relacao": ["*expressao"]
   },
   "relacao": {
-    "start": ["$!=", "$>=","$<=","$>","$<"]
+    "start": ["$=","$!=", "$>=","$<=","$>","$<"]
   },
   "expressao": {
     "start": ["*termo"],
