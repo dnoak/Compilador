@@ -32,7 +32,7 @@ lalgol = \
     if <condicao> then <cmd> <pfalsa> |\
     ident := <expressao> |\
     ident <lista_arg> |\
-                          begin <comandos> end
+    begin <comandos> end
 20. <condicao> ::= <expressao> <relacao> <expressao>
 21. <relacao> ::= = | <> | >= | <= | > | <
 22. <expressao> ::= <termo> <outros_termos>

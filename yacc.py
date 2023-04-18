@@ -9,7 +9,7 @@ def state_machine(automata, depth=1):
     while pos < len(string):
         states = automatas[automata][next_state]
         log(f"{spaces(depth)}❓\"{string[pos]}\" ⏩ {states}")
-        for state_pos, state in enumerate(states): #🟢
+        for state in states:
             if state[0] == '$':
                 if (string[pos]) == format_(state):
                     log(f"{spaces(depth+1)}🟢🟢🟢 \"{string[pos]}\" {state} 🟢🟢🟢")
@@ -23,9 +23,7 @@ def state_machine(automata, depth=1):
             else:
                 log(f"{spaces(depth+1)}{'🔹'*3} ↘️ INICIO {state} {'🔹'*3}")
                 return_state = state_machine(format_(state), depth+1)
-
                 if return_state:
-                    # if e else adicionados (testando ainda)
                     if state[1:] in automatas[automata].keys():
                         next_state = state[1:]
                         log(f"{spaces(depth)} * {state=}")
@@ -63,6 +61,9 @@ end .
 '''
 automata = 'programa'
 
+string = " ( ident ; ident ; ident ) "
+automata = "lista_arg"
+
 pos = 0
 string=list(string.split()+['$']) if len(string.split()) > 1 else list(string+"$")
 
@@ -77,8 +78,3 @@ log = lambda x: print(x) if True else ...
 state_machine_result = state_machine(automata)
 print(f"\n{'#'*12}\n{bool(state_machine_result)}, [{pos}:{len(string)-1}]\n{'#'*12}")
 print(string[pos])
-
-
-
-    
-
