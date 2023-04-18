@@ -62,6 +62,15 @@ var ident: real;
 var ident: integer;
 var ident, ident: integer;
 
+procedure ident(ident: integer);
+begin
+    ident := ident + ident;
+    begin
+        while ident <= ident+ident do
+        read(ident);
+    end;
+end;
+
 procedure ident(ident:real);
 begin
     read(ident, ident );
@@ -86,11 +95,10 @@ pos = 0
 
 automatas = open_automatas_in_folder('automatas')
 code = code_format(code, automatas)
-print(code)
 
 spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
 format_state = lambda x: x.split('#')[0][1:]
-log = lambda x, color=False: print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
+log = lambda x, color=False: ...#print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
 
 colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'end': '\033[0m'}
 
@@ -101,7 +109,7 @@ print(f"| Último token: {code[pos]}\n {'‾'*22}")
 
 def git_push():
     os.system('git add .')
-    os.system('git commit -m "update"')
+    os.system('git commit -m "novo teste"')
     os.system('git push')
 
 git_push()
