@@ -37,8 +37,6 @@ def recursive_state_machine(automata, code, depth=1, next_state='start'):
         if depth == 1: log('\n')
 
 def read_automatas(folder):
-    automatas = {}
-    #for file in os.listdir(folder):
     with open(f'{folder}/types.json') as j: types_fsm = json.load(j)
     with open(f'{folder}/lalg.json') as j: lalg_fsm = json.load(j)
     with open(f'{folder}/lexical.json') as j: lexical_fsm = json.load(j)
@@ -46,7 +44,6 @@ def read_automatas(folder):
 
 def format_code(code, lexical_fsm):
     lexical_order = list(lexical_fsm.keys())[0:2]
-    code = code.strip().replace('end.', 'end .')
     for order in lexical_order:
         for symbol in lexical_fsm[order]['start']:
             code = code.split(' ')
@@ -58,25 +55,27 @@ def format_code(code, lexical_fsm):
             code = ' '.join(code)
     return (code.replace('$', '').replace('  ', ' ')+' $').split()
 
-def tokenization(code, lexical_fsm, types_fsm):
+def tokenization(code):
     global pos
-    lex_tokens = sum([lexical_fsm[a]['start'] for a in lexical_fsm], [])
-    types_tokens = ['id', 'int', 'float']
-    for token in code:
-        print(token, end=' -> ')
+    lex_keys = ['reserved_symbols_2char', 'reserved_symbols_1char', 'reserved_words']
+    lex_tokens = sum([automatas[lex_key]['start'] for lex_key in lex_keys], [])
+    types_tokens = {'id': 'ident', 'int': 'numero_int', 'float': 'numero_real'}
+    tokenized_code = []
+    for token_pos, token in enumerate(code[:-1]):
         if ('$'+token) in lex_tokens:
-            print()
+            tokenized_code.append(token)
             continue
         else:
-            for type_token in types_tokens:
+            for ttoken_key, ttoken_value in types_tokens.items():
                 pos = 0
-                #print(type_token)
-                if recursive_state_machine(type_token, list(token+'$')):
-                    continue
+                result = recursive_state_machine(ttoken_key, list(token+'$'))
+                if result:
+                    if pos == len(token):
+                        tokenized_code.append(ttoken_value)
+                        break
             else:
-                print('erro')
-        input()
-         
+                print(f"Erro no token \"{token}\", posição {token_pos}")
+    return tokenized_code + ['$']
 
 spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
 format_state = lambda x: x.split('#')[0][1:]
@@ -85,11 +84,11 @@ colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'end': '
 
 code = '''
 program ident;
-var testeee6: real;
-var ident: integer;
-var ident, ident: integer;
+var teste : real;
+var id3 : real ;
+var id2, id42 : integer;
 
-procedure ident(ident: integer);
+procedure sdusu2282j2(ident: integer);
 begin
     ident := ident + ident;
     begin
@@ -103,32 +102,33 @@ begin
     read(ident, ident );
     if ident <=ident +ident then
     begin
-        ident := ident + numero_int;
+        ident := ident + 123;
         write ( ident ) ;
         write (ident);
     end
-    else ident := ident + numero_real ; 
+    else ident := ident + 123.321 ; 
 end ;
 
-begin
+begin 
     read(   ident);
     ident( ident);
-end .
+end 
 '''
 
 automata = 'programa'
-
 pos = 0
 
 types_fsm, lalg_fsm, lexical_fsm = read_automatas('automatas')
 automatas = types_fsm | lalg_fsm | lexical_fsm
-code = format_code(code, lexical_fsm)
 
-tokenization(code, lexical_fsm, types_fsm)
-input()
+formated_code = format_code(code, lexical_fsm)
 
-recursive_state_machine_result = recursive_state_machine(automata, code)
+tokenized_code = tokenization(formated_code)
+#print(tokenized_code)
+
+pos = 0
+recursive_state_machine_result = recursive_state_machine(automata, tokenized_code)
 print(f"\n {'_'*22}\n| Chegou ao fim: {bool(recursive_state_machine_result)}")
-print(f"| Tokens lidos: {pos}/{len(code)-1}")
-print(f"| Último token: {code[pos]}\n {'‾'*22}")
+print(f"| Tokens lidos: {pos}/{len(formated_code)-1}")
+print(f"| Último token: {tokenized_code[pos]} ({formated_code[pos]})\n {'‾'*22}")
 
