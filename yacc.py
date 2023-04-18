@@ -74,7 +74,7 @@ end;
 procedure ident(ident:real);
 begin
     read(ident, ident );
-    if ident <=ident +--+ident then
+    if ident <=ident +-+ident then
     begin
         ident := ident + numero_int ;
         write ( ident ) ;
