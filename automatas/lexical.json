@@ -6,6 +6,6 @@
         "start": ["$+", "$-", "$*", "$/", "$,", "$:", "$;", "$,", "$(", "$)", "${", "$}", "$>", "$<"]
     },
     "reserved_words": {
-      "start": ["$if","$then","$else","$while","$do","$end","$read","$write", "$begin", "$integer", "$real"]
+      "start": ["$program", "$if","$then","$else","$while","$do","$end","$read","$write", "$begin", "$integer", "$real"]
     }
 }

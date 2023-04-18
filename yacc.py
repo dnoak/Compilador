@@ -3,7 +3,7 @@ import json
 
 os.system('cls')
 
-def recursive_state_machine(automata, depth=1, next_state='start'):
+def recursive_state_machine(automata, code, depth=1, next_state='start'):
     global pos
     while pos < len(code):
         states = automatas[automata][next_state]
@@ -21,7 +21,7 @@ def recursive_state_machine(automata, depth=1, next_state='start'):
                         return True
             else:
                 log(f"{spaces(depth+1)}{'🔹'} ↘️ INICIO {state}")
-                return_state = recursive_state_machine(format_state(state), depth+1)
+                return_state = recursive_state_machine(format_state(state), code, depth+1)
                 if return_state:
                     if state[1:] in automatas[automata].keys():
                         next_state = state[1:]
@@ -36,17 +36,19 @@ def recursive_state_machine(automata, depth=1, next_state='start'):
             return False
         if depth == 1: log('\n')
 
-def open_automatas_in_folder(folder):
+def read_automatas(folder):
     automatas = {}
-    for file in os.listdir(folder):
-        with open(f'{folder}/{file}') as j: automatas |= json.load(j)
-    return automatas
+    #for file in os.listdir(folder):
+    with open(f'{folder}/types.json') as j: types_fsm = json.load(j)
+    with open(f'{folder}/lalg.json') as j: lalg_fsm = json.load(j)
+    with open(f'{folder}/lexical.json') as j: lexical_fsm = json.load(j)
+    return types_fsm, lalg_fsm, lexical_fsm
 
-def code_format(code, automatas):
-    lexical_order = ['reserved_symbols_2char', 'reserved_symbols_1char']
+def format_code(code, lexical_fsm):
+    lexical_order = list(lexical_fsm.keys())[0:2]
     code = code.strip().replace('end.', 'end .')
     for order in lexical_order:
-        for symbol in automatas[order]['start']:
+        for symbol in lexical_fsm[order]['start']:
             code = code.split(' ')
             for i in range(len(code)):
                 if '$' in code[i]: 
@@ -56,9 +58,34 @@ def code_format(code, automatas):
             code = ' '.join(code)
     return (code.replace('$', '').replace('  ', ' ')+' $').split()
 
+def tokenization(code, lexical_fsm, types_fsm):
+    global pos
+    lex_tokens = sum([lexical_fsm[a]['start'] for a in lexical_fsm], [])
+    types_tokens = ['id', 'int', 'float']
+    for token in code:
+        print(token, end=' -> ')
+        if ('$'+token) in lex_tokens:
+            print()
+            continue
+        else:
+            for type_token in types_tokens:
+                pos = 0
+                #print(type_token)
+                if recursive_state_machine(type_token, list(token+'$')):
+                    continue
+            else:
+                print('erro')
+        input()
+         
+
+spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
+format_state = lambda x: x.split('#')[0][1:]
+log = lambda x, color=False: ...#print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
+colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'end': '\033[0m'}
+
 code = '''
 program ident;
-var ident: real;
+var testeee6: real;
 var ident: integer;
 var ident, ident: integer;
 
@@ -74,9 +101,9 @@ end;
 procedure ident(ident:real);
 begin
     read(ident, ident );
-    if ident <=ident +-+ident then
+    if ident <=ident +ident then
     begin
-        ident := ident + numero_int ;
+        ident := ident + numero_int;
         write ( ident ) ;
         write (ident);
     end
@@ -93,23 +120,15 @@ automata = 'programa'
 
 pos = 0
 
-automatas = open_automatas_in_folder('automatas')
-code = code_format(code, automatas)
+types_fsm, lalg_fsm, lexical_fsm = read_automatas('automatas')
+automatas = types_fsm | lalg_fsm | lexical_fsm
+code = format_code(code, lexical_fsm)
 
-spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
-format_state = lambda x: x.split('#')[0][1:]
-log = lambda x, color=False: ...#print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
+tokenization(code, lexical_fsm, types_fsm)
+input()
 
-colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'end': '\033[0m'}
-
-recursive_state_machine_result = recursive_state_machine(automata)
+recursive_state_machine_result = recursive_state_machine(automata, code)
 print(f"\n {'_'*22}\n| Chegou ao fim: {bool(recursive_state_machine_result)}")
 print(f"| Tokens lidos: {pos}/{len(code)-1}")
 print(f"| Último token: {code[pos]}\n {'‾'*22}")
 
-def git_push():
-    os.system('git add .')
-    os.system('git commit -m "novo teste"')
-    os.system('git push')
-
-git_push()
