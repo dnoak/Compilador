@@ -96,12 +96,16 @@
     "write": ["$("],
     "(": ["*variaveis"],
     "variaveis": ["$)"],
-    "while": ["*condicao"],
-    "if": ["*condicao"],
-    "condicao": ["$then"],
-    "do": ["*cmd"],
-    "then": ["*cmd"],
-    "cmd": ["*pfalsa"],
+
+    "while": ["*condicao#while"],
+    "condicao#while": ["$do"],
+    "do": ["*cmd#do"],
+
+    "if": ["*condicao#if"],
+    "condicao#if": ["$then"],
+    "then": ["*cmd#then"],
+    "cmd#then": ["*pfalsa"],
+
     "ident": ["*lista_arg", "$:="],
     ":=": ["*expressao"],
     "begin": ["*comandos"],

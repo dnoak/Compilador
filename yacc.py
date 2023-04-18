@@ -39,13 +39,28 @@ def state_machine(automata, depth=1):
             return 0
         if depth == 1: log('\n')
 
+string = '''
+program ident ;
+var ident : real ;
+var ident : integer ;
+var ident , ident : integer ;
 
-string = ' \
-program ident ; \
-var ident : real ; \
-var ident : integer ; \
-. \
-'
+procedure ident ( ident : real ) ;
+begin
+    read ( ident , ident ) ;
+    if ident < ident + ident then
+    begin
+        ident := ident + ident ;
+        write ( ident ) ;
+    end
+    else ident := ident + ident ; 
+end ;
+
+begin
+  read ( ident ) ;
+  ident ( ident ) ;
+end .
+'''
 automata = 'programa'
 
 pos = 0
@@ -61,7 +76,7 @@ log = lambda x: print(x) if True else ...
 
 state_machine_result = state_machine(automata)
 print(f"\n{'#'*12}\n{bool(state_machine_result)}, [{pos}:{len(string)-1}]\n{'#'*12}")
-
+print(string[pos])
 
 
 

@@ -27,11 +27,11 @@ lalgol = \
 18. <comandos> ::= <cmd> ; <comandos> | λ
 19. <cmd> ::=\
     read ( <variaveis> ) |\
-      write ( <variaveis> ) |\
-          while <condicao> do <cmd> |\
-              if <condicao> then <cmd> <pfalsa> |\
-                  ident := <expressao> |\
-                      ident <lista_arg> |\
+    write ( <variaveis> ) |\
+    while <condicao> do <cmd> |\
+    if <condicao> then <cmd> <pfalsa> |\
+    ident := <expressao> |\
+    ident <lista_arg> |\
                           begin <comandos> end
 20. <condicao> ::= <expressao> <relacao> <expressao>
 21. <relacao> ::= = | <> | >= | <= | > | <
