@@ -19,7 +19,7 @@ def state_machine(automata, depth=1):
                         break
                     else:
                         log(f"{spaces(depth)} ✔️ $ {state=}")
-                        return 1
+                        return True
             else:
                 log(f"{spaces(depth+1)}{'🔹'*3} ↘️ INICIO {state} {'🔹'*3}")
                 return_state = state_machine(format_(state), depth+1)
@@ -28,13 +28,13 @@ def state_machine(automata, depth=1):
                         next_state = state[1:]
                         log(f"{spaces(depth)} * {state=}")
                         break
-                    else: return 1
+                    else: return True
         else:
             if '$' in states:
                 log(f"{spaces(depth)}{'🔸'*3} FIM {automata} {'🔸'*3}")
-                return 1
+                return True
             log(f"{spaces(depth)}❌ {state=}")
-            return 0
+            return False
         if depth == 1: log('\n')
 
 string = '''
