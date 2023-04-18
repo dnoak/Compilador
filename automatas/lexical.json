@@ -1,0 +1,11 @@
+{
+    "reserved_symbols_2char": {
+        "start": ["$!=", "$<=", "$>=", "$:="]
+    },
+    "reserved_symbols_1char": {
+        "start": ["$+", "$-", "$*", "$/", "$,", "$:", "$;", "$,", "$(", "$)", "${", "$}", "$>", "$<"]
+    },
+    "reserved_words": {
+      "start": ["$if","$then","$else","$while","$do","$end","$read","$write", "$begin", "$integer", "$real"]
+    }
+}

@@ -86,7 +86,7 @@ def state_machine(automata, depth=0):
     end_of_state = False
     while not end_of_state:
         states = automatas[automata][next_state]
-        for state_pos, state in enumerate(states): #🟢
+        for state_pos, state in enumerate(states):
             if state[0] == '$':
                 if (string[pos]) == format(state):
                     pos += 1
@@ -112,17 +112,13 @@ string=list(string.split()+['$']) if len(string.split()) > 1 else list(string+"$
 automatas = {}
 with open('lalg.json') as j: automatas |= json.load(j)
 with open('automatas.json') as j: automatas |= json.load(j)
-
+print(automatas)
 spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
 format_ = lambda x: x.split('#')[0][1:]
 log = lambda x: print(x) if True else ...
 
 state_machine_result = state_machine(automata)
 print(f"\n{'#'*12}\n{bool(state_machine_result)}, [{pos}:{len(string)-1}]\n{'#'*12}")
-
-
-
-
 
     
 
