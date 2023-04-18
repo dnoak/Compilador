@@ -1,0 +1,363 @@
+{
+  "programa": {
+    "start": [
+      "$program"
+    ],
+    "program": [
+      "$ident"
+    ],
+    "ident": [
+      "$;"
+    ],
+    ";": [
+      "*corpo"
+    ],
+    "corpo": [
+      "$."
+    ]
+  },
+  "corpo": {
+    "start": [
+      "*dc"
+    ],
+    "dc": [
+      "$begin"
+    ],
+    "begin": [
+      "*comandos"
+    ],
+    "comandos": [
+      "$end"
+    ]
+  },
+  "dc": {
+    "start": [
+      "*dc_v"
+    ],
+    "dc_v": [
+      "*dc_p"
+    ]
+  },
+  "dc_v": {
+    "start": [
+      "$var",
+      "$\u03bb"
+    ],
+    "var": [
+      "*variaveis"
+    ],
+    "variaveis": [
+      "$:"
+    ],
+    ":": [
+      "*tipo_var"
+    ],
+    "tipo_var": [
+      "$;"
+    ],
+    ";": [
+      "*dc_v"
+    ]
+  },
+  "tipo_var": {
+    "start": [
+      "$real",
+      "$integer"
+    ]
+  },
+  "variaveis": {
+    "start": [
+      "$ident"
+    ],
+    "ident": [
+      "*mais_var"
+    ]
+  },
+  "mais_var": {
+    "start": [
+      "$,",
+      "$\u03bb"
+    ],
+    ",": [
+      "*variaveis"
+    ]
+  },
+  "dc_p": {
+    "start": [
+      "$procedure",
+      "$\u03bb"
+    ],
+    "procedure": [
+      "$ident"
+    ],
+    "ident": [
+      "*parametros"
+    ],
+    "parametros": [
+      "$;"
+    ],
+    ";": [
+      "*corpo_p"
+    ],
+    "corpo_p": [
+      "*dc_p"
+    ]
+  },
+  "parametros": {
+    "start": [
+      "$(",
+      "$\u03bb"
+    ],
+    "(": [
+      "*lista_par"
+    ],
+    "lista_par": [
+      "$)"
+    ]
+  },
+  "lista_par": {
+    "start": [
+      "*variaveis"
+    ],
+    "variaveis": [
+      "$:"
+    ],
+    ":": [
+      "*tipo_var"
+    ],
+    "tipo_var": [
+      "*mais_par"
+    ]
+  },
+  "mais_par": {
+    "start": [
+      "$;",
+      "$\u03bb"
+    ],
+    ";": [
+      "*lista_par"
+    ]
+  },
+  "corpo_p": {
+    "start": [
+      "*dc_loc"
+    ],
+    "dc_loc": [
+      "$begin"
+    ],
+    "begin": [
+      "*comandos"
+    ],
+    "comandos": [
+      "$end"
+    ],
+    "end": [
+      "$;"
+    ]
+  },
+  "dc_loc": {
+    "start": [
+      "*dc_v"
+    ]
+  },
+  "lista_arg": {
+    "start": [
+      "$(",
+      "$\u03bb"
+    ],
+    "(": [
+      "*argumentos"
+    ],
+    "argumentos": [
+      "$)"
+    ]
+  },
+  "argumentos": {
+    "start": [
+      "$ident"
+    ],
+    "ident": [
+      "*mais_ident"
+    ]
+  },
+  "mais_ident": {
+    "start": [
+      "$;",
+      "$\u03bb"
+    ],
+    ";": [
+      "*argumentos"
+    ]
+  },
+  "pfalsa": {
+    "start": [
+      "$else",
+      "$\u03bb"
+    ],
+    "else": [
+      "*cmd"
+    ]
+  },
+  "comandos": {
+    "start": [
+      "*cmd",
+      "$\u03bb"
+    ],
+    "cmd": [
+      "$;"
+    ],
+    ";": [
+      "*comandos"
+    ]
+  },
+  "cmd": {
+    "start": [
+      "$read",
+      "$write",
+      "$while",
+      "$if",
+      "$ident",
+      "$ident",
+      "$begin"
+    ],
+    "read": [
+      "$("
+    ],
+    "(": [
+      "*variaveis"
+    ],
+    "variaveis": [
+      "$)"
+    ],
+    "write": [
+      "$("
+    ],
+    "while": [
+      "*condicao"
+    ],
+    "condicao": [
+      "$then"
+    ],
+    "do": [
+      "*cmd"
+    ],
+    "if": [
+      "*condicao"
+    ],
+    "then": [
+      "*cmd"
+    ],
+    "cmd": [
+      "*pfalsa"
+    ],
+    "ident": [
+      "*lista_arg"
+    ],
+    ":=": [
+      "*expressao"
+    ],
+    "begin": [
+      "*comandos"
+    ],
+    "comandos": [
+      "$end"
+    ]
+  },
+  "condicao": {
+    "start": [
+      "*expressao"
+    ],
+    "expressao": [
+      "*relacao"
+    ],
+    "relacao": [
+      "*expressao"
+    ]
+  },
+  "relacao": {
+    "start": [
+      "$=",
+      "*",
+      "$>=",
+      "$<=",
+      "$>",
+      "$<"
+    ]
+  },
+  "expressao": {
+    "start": [
+      "*termo"
+    ],
+    "termo": [
+      "*outros_termos"
+    ]
+  },
+  "op_un": {
+    "start": [
+      "$+",
+      "$-",
+      "$\u03bb"
+    ]
+  },
+  "outros_termos": {
+    "start": [
+      "*op_ad",
+      "$\u03bb"
+    ],
+    "op_ad": [
+      "*termo"
+    ],
+    "termo": [
+      "*outros_termos"
+    ]
+  },
+  "op_ad": {
+    "start": [
+      "$+",
+      "$-"
+    ]
+  },
+  "termo": {
+    "start": [
+      "*op_un"
+    ],
+    "op_un": [
+      "*fator"
+    ],
+    "fator": [
+      "*mais_fatores"
+    ]
+  },
+  "mais_fatores": {
+    "start": [
+      "*op_mul",
+      "$\u03bb"
+    ],
+    "op_mul": [
+      "*fator"
+    ],
+    "fator": [
+      "*mais_fatores"
+    ]
+  },
+  "op_mul": {
+    "start": [
+      "$*",
+      "$/"
+    ]
+  },
+  "fator": {
+    "start": [
+      "$ident",
+      "$numero_int",
+      "$numero_real",
+      "$("
+    ],
+    "(": [
+      "*expressao"
+    ],
+    "expressao": [
+      "$)"
+    ]
+  }
+}

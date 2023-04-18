@@ -72,5 +72,5 @@ for line in lalgol.split('\n'):
     #input()
 
 
-with open('lalg.json', 'w') as j:
+with open('jahhahaha.json', 'w') as j:
     j.write(json.dumps(automatas, indent=2))

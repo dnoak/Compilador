@@ -3,6 +3,17 @@ import json
 
 os.system('cls')
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def state_machine(automata, depth=1):
     global pos
     next_state = 'start'
@@ -65,7 +76,7 @@ string = " ( ident ; ident ; ident ) "
 automata = "lista_arg"
 
 pos = 0
-string=list(string.split()+['$']) if len(string.split()) > 1 else list(string+"$")
+string = list(string.split()+['$']) if len(string.split()) > 1 else list(string+"$")
 
 automatas = {}
 with open('lalg.json') as j: automatas |= json.load(j)
