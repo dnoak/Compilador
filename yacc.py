@@ -113,3 +113,10 @@ def git_push():
     os.system('git push')
 
 git_push()
+
+# create git ignore for __pycache__ and .vscode 
+def git_ignore_pycache():
+    with open('.gitignore', 'a') as gitignore:
+        gitignore.write('__pycache__/')
+
+git_ignore_pycache()
