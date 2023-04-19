@@ -15,13 +15,14 @@ begin
         read(ident, ident );
         if ident <=ident +ident then
         begin 
+        TOKEN2.ERRADO
             ident := var1 + 123; {outro coment[ariop]}
             write ( var2 ) ;
             read (var4);
         end
         else
             variavel :=  +.321 ; 
-    end;
+    end; novo.token.errado
 end ;
 
 begin 

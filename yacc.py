@@ -125,7 +125,7 @@ for i, (code, file_name) in enumerate(codes):
     color_read = 'green' if pos == len(formated_code)-1 else 'red'
     color_last = 'green' if tokenized_code[pos] == '$' else 'red'
     log(f" _____Análise sintática_____", 'yellow')
-    log(f"| Chegou ao fim: {bool(recursive_state_machine_result)}", color_end)
+    log(f"| Estado terminal: {bool(recursive_state_machine_result)}", color_end)
     log(f"| Tokens lidos: {pos}/{len(formated_code)-1}", color_read)
     log(f"| Último token lido: {tokenized_code[pos]} ({formated_code[pos]})", color_last)
     print('\n\n')
