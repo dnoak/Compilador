@@ -97,9 +97,10 @@ def tokenization(code):
 
 spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
 format_state = lambda x: x.split('#')[0][1:]
-log_syntatic = lambda x, color=False: ...#print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
-log = lambda x, color=False: print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
-colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'blue': '\033[96m', 'end': '\033[0m'}
+log_syntatic = lambda x, color=False, enable=False: log(x, color) if enable else ...
+log = lambda x, color=False: print(f"{colors[color]}{x}'\033[0m") if color else print(x)
+
+colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'blue': '\033[96m'}
 
 codes = []
 for file in glob.glob('codes/*.lalg'):
@@ -128,10 +129,3 @@ for i, (code, file_name) in enumerate(codes):
     log(f"| Tokens lidos: {pos}/{len(formated_code)-1}", color_read)
     log(f"| Último token lido: {tokenized_code[pos]} ({formated_code[pos]})", color_last)
     print('\n\n')
-
-import os
-def git_push():
-    os.system("git add .")
-    os.system('git commit -m "final"')
-    os.system("git push")
-git_push()
