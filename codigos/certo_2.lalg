@@ -1,0 +1,27 @@
+program programa;
+var teste : real;
+var id3 : real ;
+var id2, id42 : integer;
+var teste : real;
+var id3 : real ;
+var id2, id42 : integer;
+{comentário`{}{ }{ teste} {3} 
+
+
+procedure ident(ident:real);
+begin {comenteer}{{{}
+    read(ident, ident );
+    if ident <=ident +ident then
+    begin 
+        ident := var1 + 123; {outro coment[ariop]}
+        write ( var2 ) ;
+        read (var4);
+    end
+    else
+        ident :=  +.321 ; 
+end ;
+
+begin 
+    read(   ident);
+    ident( ident);
+end.

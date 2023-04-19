@@ -1,0 +1,35 @@
+program programa;
+var teste : real;
+var id3 : real ;
+var id2, id42 : integer;
+{comentário`{}{ }{ teste} {3} 
+
+procedure sdusu2282j2(arg1: integer; arg2: real);
+begin {outro comentário teste}
+    begin
+        begin
+            ident := arg1 + arg1;
+            begin
+                while arg1 <= ident+ident do
+                read(argumentoou);
+            end;
+        end;
+    end;
+end;
+
+procedure ident(ident:real);
+begin
+    read(ident, ident );
+    if ident <=ident +ident then
+    begin
+        ident := var1 + 123;
+        write ( var2 ) ;
+        read (var4);
+    end
+    else ident :=  +.321 ; 
+end ;
+
+begin 
+    read(   ident);
+    ident( ident);
+end.

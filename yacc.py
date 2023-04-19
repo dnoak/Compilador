@@ -1,5 +1,6 @@
 import os
 import json
+import glob
 
 os.system('cls')
 
@@ -43,21 +44,13 @@ def read_automatas(folder):
     return types_fsm, lalg_fsm, lexical_fsm
 
 def remove_coments(code):
-    #pos = 0
     for pos, char in enumerate(code):
-        jump = 0
         if char == '{':
             code[pos] = ''
-            while jump != -1:
-                if code[pos] == '{':
-                    jump += 1
-                if code[pos] == '}':
-                    jump -= 1
+            while code[pos] != '}':
                 code[pos] = ''
                 pos += 1
             code[pos] = ''
-    
-    print(''.join(code))
     return ''.join(code)
 
 def format_code(code, lexical_fsm):
@@ -82,7 +75,7 @@ def tokenization(code):
     types_tokens = {'id': 'ident', 'int': 'numero_int', 'float': 'numero_real', '.': '.'}
     tokenized_code = []
     lexical_error = 0
-    print(f" ______Análise léxica______")
+    log(f" ______Análise léxica______", 'yellow')
     for token_pos, token in enumerate(code[:-1]):
         if ('$'+token) in lex_tokens:
             tokenized_code.append(token)
@@ -106,63 +99,32 @@ spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
 format_state = lambda x: x.split('#')[0][1:]
 log_syntatic = lambda x, color=False: ...#print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
 log = lambda x, color=False: print(f"{colors[color]}{x}{colors['end']}") if color else print(x)
-colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'end': '\033[0m'}
+colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'blue': '\033[96m', 'end': '\033[0m'}
 
-code = '''
-program programa;
-var teste : real;
-var id3 : real ;
-var id2, id42 : integer;
-{comentário`{} teste} {3} 
+codes = []
+for file in glob.glob('codigos/*.lalg'):
+    with open(file) as f:
+        codes.append((f.read(), file))
 
-procedure sdusu2282j2(arg1: integer; arg2: real);
-begin {outro comentário teste}
-    begin
-        begin
-            ident := arg1 + arg1;
-            begin
-                while arg1 <= ident+ident do
-                read(argumentoou);
-            end;
-        end;
-    end;
-end;
+for i, (code, file_name) in enumerate(codes):
+    log(f'Código: {os.path.split(file_name)[1]}', 'blue')
+    automata = 'programa'
 
-procedure ident(ident:real);
-begin
-    read(ident, ident );
-    if ident <=ident +ident then
-    begin
-        ident := var1 + 123;
-        write ( var2 ) ;
-        read (var4);
-    end
-    else ident :=  +.321 ; 
-end ;
+    types_fsm, lalg_fsm, lexical_fsm = read_automatas('automatas')
+    automatas = types_fsm | lalg_fsm | lexical_fsm
 
-begin 
-    read(   ident);
-    ident( ident);
-end.
-'''
+    pos = 0
+    formated_code = format_code(code, lexical_fsm)
+    tokenized_code = tokenization(formated_code)
 
-automata = 'programa'
+    pos = 0
+    recursive_state_machine_result = recursive_state_machine(automata, tokenized_code)
 
-types_fsm, lalg_fsm, lexical_fsm = read_automatas('automatas')
-automatas = types_fsm | lalg_fsm | lexical_fsm
-
-pos = 0
-formated_code = format_code(code, lexical_fsm)
-tokenized_code = tokenization(formated_code)
-
-pos = 0
-recursive_state_machine_result = recursive_state_machine(automata, tokenized_code)
-
-color_end = 'green' if recursive_state_machine_result else 'red'
-color_read = 'green' if pos == len(formated_code)-1 else 'red'
-color_last = 'green' if tokenized_code[pos] == '$' else 'red'
-print(f"\n _____Análise sintática_____")
-log(f"| Chegou ao fim: {bool(recursive_state_machine_result)}", color_end)
-log(f"| Tokens lidos: {pos}/{len(formated_code)-1}", color_read)
-log(f"| Último token lido: {tokenized_code[pos]} ({formated_code[pos]})", color_last)
-
+    color_end = 'green' if recursive_state_machine_result else 'red'
+    color_read = 'green' if pos == len(formated_code)-1 else 'red'
+    color_last = 'green' if tokenized_code[pos] == '$' else 'red'
+    log(f" _____Análise sintática_____", 'yellow')
+    log(f"| Chegou ao fim: {bool(recursive_state_machine_result)}", color_end)
+    log(f"| Tokens lidos: {pos}/{len(formated_code)-1}", color_read)
+    log(f"| Último token lido: {tokenized_code[pos]} ({formated_code[pos]})", color_last)
+    print('\n\n')

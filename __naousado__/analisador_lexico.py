@@ -1,4 +1,4 @@
-from maquina_de_estados import MaquinaDeEstados
+from lixo.maquina_de_estados import MaquinaDeEstados
 from pprint import pprint
 import os
 
