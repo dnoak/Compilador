@@ -98,7 +98,7 @@ def tokenization(code):
 spaces = lambda x: ''.join([f'|{s}|' if s==x-1 else '|   ' for s in range(x)])
 format_state = lambda x: x.split('#')[0][1:]
 log_syntatic = lambda x, color=False, enable=False: log(x, color) if enable else ...
-log = lambda x, color=False: print(f"{colors[color]}{x}'\033[0m") if color else print(x)
+log = lambda x, color=False: print(f"{colors[color]}{x}\033[0m") if color else print(x)
 
 colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'blue': '\033[96m'}
 
