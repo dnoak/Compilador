@@ -102,7 +102,7 @@ log = lambda x, color=False: print(f"{colors[color]}{x}{colors['end']}") if colo
 colors = {'green': '\033[92m', 'red': '\033[91m', 'yellow': '\033[93m', 'blue': '\033[96m', 'end': '\033[0m'}
 
 codes = []
-for file in glob.glob('codigos/*.lalg'):
+for file in glob.glob('codes/*.lalg'):
     with open(file) as f:
         codes.append((f.read(), file))
 
@@ -128,3 +128,10 @@ for i, (code, file_name) in enumerate(codes):
     log(f"| Tokens lidos: {pos}/{len(formated_code)-1}", color_read)
     log(f"| Último token lido: {tokenized_code[pos]} ({formated_code[pos]})", color_last)
     print('\n\n')
+
+import os
+def git_push():
+    os.system("git add .")
+    os.system('git commit -m "final"')
+    os.system("git push")
+git_push()
